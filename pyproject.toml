@@ -10,7 +10,7 @@ authors = [
 ]
 description = "Generate DAS2 for the french tax administration"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.6"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
