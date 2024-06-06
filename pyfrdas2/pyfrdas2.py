@@ -22,6 +22,12 @@ logger = logging.getLogger('pyfrdas2')
 logger.setLevel(logging.INFO)
 
 
+def get_partner_declaration_threshold(year):
+    if not isinstance(year, int):
+        raise ValueError("year must be an integer")
+    return 1200
+
+
 def generate_file(file_bytes, year, siren, encryption="prod"):
     logger.debug(
         'generate_file with year=%s, siren=%s and encryption=%s',

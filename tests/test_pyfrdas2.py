@@ -3,7 +3,7 @@
 # Licence LGPL-2.1 or later (https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html).
 
 import unittest
-from pyfrdas2 import format_street_block, generate_file
+from pyfrdas2 import format_street_block, generate_file, get_partner_declaration_threshold
 
 
 class Testpyfrdas2(unittest.TestCase):
@@ -72,3 +72,6 @@ class Testpyfrdas2(unittest.TestCase):
             generate_file(file_str, 2023, siren)
         with self.assertRaises(ValueError):
             generate_file(file_bytes, 2023, siren, encryption='pouet')
+
+    def test_get_partner_declaration_threshold(self):
+        self.assertTrue(get_partner_declaration_threshold(2023) == 1200)
