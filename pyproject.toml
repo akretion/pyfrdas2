@@ -1,16 +1,12 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
 name = "pyfrdas2"
-dynamic = ["version"]
+version = "0.5"
+description = "Generate DAS2 for the french tax administration"
 authors = [
   { name="Alexis de Lattre", email="alexis.delattre@akretion.com" },
 ]
-description = "Generate DAS2 for the french tax administration"
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.7"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -19,14 +15,17 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Office/Business :: Financial :: Accounting",
 ]
-dependencies = [
-    "pgpy",
-    "unidecode",
-]
-
-[tool.hatch.version]
-path = "pyfrdas2/_version.py"
+license = {file = "LICENSE"}
+dynamic = ["dependencies"]
 
 [project.urls]
 Homepage = "https://github.com/akretion/pyfrdas2"
+Source = "https://github.com/akretion/pyfrdas2"
 Issues = "https://github.com/akretion/pyfrdas2/issues"
+
+[build-system]
+requires = ["hatchling", "hatch-requirements-txt"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["requirements.txt"]

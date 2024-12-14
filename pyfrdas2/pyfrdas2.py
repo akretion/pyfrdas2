@@ -2,7 +2,6 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # Licence LGPL-2.1 or later (https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html).
 
-from ._version import __version__
 import logging
 from datetime import datetime
 import pgpy
@@ -13,9 +12,11 @@ from unidecode import unidecode
 # pkg_resources, because their interface changes too much among python version
 # and I don't want to be bothered by interfaces different in 3.11
 from pkg_resources import resource_filename
+import importlib.metadata
 from .fantoir import FANTOIR_MAP
 
 
+VERSION = importlib.metadata.version("pyfrdas2")
 FORMAT = '%(asctime)s [%(levelname)s] %(message)s'
 logging.basicConfig(format=FORMAT)
 logger = logging.getLogger('pyfrdas2')
@@ -32,6 +33,7 @@ def generate_file(file_bytes, year, siren, encryption="prod"):
     logger.debug(
         'generate_file with year=%s, siren=%s and encryption=%s',
         year, siren, encryption)
+    logger.debug('using pyfrdas2 version %s', VERSION)
     if encryption not in ("prod", "test", "none"):
         raise ValueError("Wrong value for encryption argument.")
     if not isinstance(year, int):
@@ -59,7 +61,7 @@ def generate_file(file_bytes, year, siren, encryption="prod"):
             raise ValueError(
                 f"The DAS2 encryption key is not available for year {year} "
                 f"(file '{key_filename}' is not available in the python library "
-                f"pyfrdas2 version {__version__}). Try to upgrade the library."
+                f"pyfrdas2 version {VERSION}). Try to upgrade the library."
             ) from e
         pubkey = pgpy.PGPKey.from_blob(key_file_blob)[0]
         file_content_compressed = gzip.compress(file_bytes)
