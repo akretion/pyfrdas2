@@ -15,7 +15,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Office/Business :: Financial :: Accounting",
 ]
-license = {file = "LICENSE"}
 dynamic = ["dependencies"]
 
 [project.urls]

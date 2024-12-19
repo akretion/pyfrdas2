@@ -47,11 +47,14 @@ def generate_file(file_bytes, year, siren, encryption="prod"):
         raise ValueError("The siren argument must be a string of 9 digits.")
     if not isinstance(file_bytes, bytes):
         raise ValueError("The file_bytes argument must be a bytes.")
+    key_year = year
+    if key_year == 2024:  # keys unchanged in 2024
+        key_year = 2023
     if encryption in ("prod", "test"):
         prefix = "DSAL_"
         file_ext = "txt.gz.gpg"
         encryption_up = encryption.upper()
-        key_filename = f'{year}-DGFIP_TIERSDECLARANTS_{encryption_up}.asc'
+        key_filename = f'{key_year}-DGFIP_TIERSDECLARANTS_{encryption_up}.asc'
         key_path = resource_filename(__name__, f'pgp_keys/{key_filename}')
         logger.debug('Encryption key path is %s', key_path)
         try:
