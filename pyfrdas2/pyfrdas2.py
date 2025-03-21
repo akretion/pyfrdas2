@@ -26,7 +26,11 @@ logger.setLevel(logging.INFO)
 def get_partner_declaration_threshold(year):
     if not isinstance(year, int):
         raise ValueError("year must be an integer")
-    return 1200
+    # threshold updated from 1200 € to 2400 € from decl 2025 for year 2024
+    # https://bofip.impots.gouv.fr/bofip/14327-PGP.html/ACTU-2024-00154
+    if year < 2024:
+        return 1200
+    return 2400
 
 
 def generate_file(file_bytes, year, siren, encryption="prod"):
