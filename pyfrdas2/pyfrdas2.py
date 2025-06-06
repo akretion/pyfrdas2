@@ -8,10 +8,7 @@ import pgpy
 import gzip
 import re
 from unidecode import unidecode
-# I decided NOT to use importlib.resources which is supposed to replace
-# pkg_resources, because their interface changes too much among python version
-# and I don't want to be bothered by interfaces different in 3.11
-from pkg_resources import resource_filename
+import pathlib
 import importlib.metadata
 from .fantoir import FANTOIR_MAP
 
@@ -59,7 +56,8 @@ def generate_file(file_bytes, year, siren, encryption="prod"):
         file_ext = "txt.gz.gpg"
         encryption_up = encryption.upper()
         key_filename = f'{key_year}-DGFIP_TIERSDECLARANTS_{encryption_up}.asc'
-        key_path = resource_filename(__name__, f'pgp_keys/{key_filename}')
+        current_dir = pathlib.Path(__file__).parents[0]
+        key_path = pathlib.Path(current_dir, f'pgp_keys/{key_filename}')
         logger.debug('Encryption key path is %s', key_path)
         try:
             with open(key_path, mode="rb") as key_file:
