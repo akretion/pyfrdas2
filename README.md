@@ -12,6 +12,7 @@ This library is published under the [GNU Lesser General Public License v2.1](htt
 
 ## Changelog
 
+* version 0.8 dated 2025-06-06: switch back to pgpy because pgpy13 solves the warning but requires a minimum version of cryptography which breaks odoo tests on python 3.10.
 * version 0.7 dated 2025-06-06: switch to pgpy13 to avoid warning. Remove use of pkg\_resources.
 * version 0.6 dated 2025-03-21: threshold for year 2024+ updated from 1200 € to 2400 € ([source](https://bofip.impots.gouv.fr/bofip/14327-PGP.html/ACTU-2024-00154))
 * version 0.5 dated 2024-12-14: modernize packaging and version management

@@ -1,2 +1,2 @@
-pgpy13
+pgpy
 unidecode
