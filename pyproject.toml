@@ -1,6 +1,5 @@
 [project]
 name = "pyfrdas2"
-version = "0.8"
 description = "Generate DAS2 for the french tax administration"
 authors = [
   { name="Alexis de Lattre", email="alexis.delattre@akretion.com" },
@@ -15,7 +14,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Office/Business :: Financial :: Accounting",
 ]
-dynamic = ["dependencies"]
+dynamic = ["dependencies", "version"]
 
 [project.urls]
 Homepage = "https://github.com/akretion/pyfrdas2"
@@ -28,3 +27,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.metadata.hooks.requirements_txt]
 files = ["requirements.txt"]
+
+[tool.hatch.version]
+path = "pyfrdas2/__init__.py"

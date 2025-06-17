@@ -4,7 +4,8 @@
 
 import logging
 from datetime import datetime
-import pgpy
+import gnupg
+import tempfile
 import gzip
 import re
 from unidecode import unidecode
@@ -59,6 +60,8 @@ def generate_file(file_bytes, year, siren, encryption="prod"):
         current_dir = pathlib.Path(__file__).parents[0]
         key_path = pathlib.Path(current_dir, f'pgp_keys/{key_filename}')
         logger.debug('Encryption key path is %s', key_path)
+        gnupghome = tempfile.mkdtemp(prefix="pyfrdas2-")
+        gpg = gnupg.GPG(gnupghome=gnupghome)
         try:
             with open(key_path, mode="rb") as key_file:
                 key_file_blob = key_file.read()
@@ -68,22 +71,23 @@ def generate_file(file_bytes, year, siren, encryption="prod"):
                 f"(file '{key_filename}' is not available in the python library "
                 f"pyfrdas2 version {VERSION}). Try to upgrade the library."
             ) from e
-        pubkey = pgpy.PGPKey.from_blob(key_file_blob)[0]
+        imported_key = gpg.import_keys(key_file_blob)
         file_content_compressed = gzip.compress(file_bytes)
-        to_encrypt_object = pgpy.PGPMessage.new(file_content_compressed)
-        file_bytes_result = bytes(pubkey.encrypt(to_encrypt_object))
+        encrypt_res = gpg.encrypt(
+            file_content_compressed, imported_key.fingerprints,
+            always_trust=True, armor=False)
+        if not encrypt_res.ok:
+            raise ValueError(
+                f"Failed to encrypt the DAS2 file. Error: {encrypt_res.status}. "
+                f"Detailed error: {encrypt_res.stderr}")
+        file_bytes_result = encrypt_res.data
     else:
         file_bytes_result = file_bytes
         prefix = "UNENCRYPTED_DAS2_for_audit-"
         file_ext = "txt"
 
-    filename = "%(prefix)s%(year)s_%(siren)s_000_%(gentime)s.%(file_ext)s" % {
-        "prefix": prefix,
-        "year": year,
-        "siren": siren,
-        "gentime": datetime.now().strftime("%Y%m%d%H%M%S"),
-        "file_ext": file_ext,
-    }
+    gentime = datetime.now().strftime("%Y%m%d%H%M%S")
+    filename = f"{prefix}{year}_{siren}_000_{gentime}.{file_ext}"
     logger.info('Successfully generated DAS2 file %s', filename)
     return (file_bytes_result, filename)
 

@@ -1,2 +1,2 @@
-pgpy
+python-gnupg
 unidecode
